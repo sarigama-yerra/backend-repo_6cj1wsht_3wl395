@@ -12,7 +12,7 @@ Model name is converted to lowercase for the collection name:
 """
 
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional, List
 
 # Example schemas (replace with your own):
 
@@ -38,11 +38,21 @@ class Product(BaseModel):
     category: str = Field(..., description="Product category")
     in_stock: bool = Field(True, description="Whether product is in stock")
 
-# Add your own schemas here:
-# --------------------------------------------------
-
-# Note: The Flames database viewer will automatically:
-# 1. Read these schemas from GET /schema endpoint
-# 2. Use them for document validation when creating/editing
-# 3. Handle all database operations (CRUD) directly
-# 4. You don't need to create any database endpoints!
+class Property(BaseModel):
+    """
+    Real estate properties for sale
+    Collection name: "property"
+    """
+    title: str = Field(..., description="Listing title")
+    description: Optional[str] = Field(None, description="Short description")
+    price: float = Field(..., ge=0, description="Asking price in USD")
+    bedrooms: Optional[int] = Field(None, ge=0, description="Number of bedrooms")
+    bathrooms: Optional[float] = Field(None, ge=0, description="Number of bathrooms")
+    area_sqft: Optional[float] = Field(None, ge=0, description="Area in sqft")
+    images: Optional[List[str]] = Field(default_factory=list, description="Image URLs")
+    address: Optional[str] = Field(None, description="Street address")
+    city: Optional[str] = Field(None)
+    state: Optional[str] = Field(None)
+    country: Optional[str] = Field(None)
+    latitude: Optional[float] = Field(None, description="Latitude")
+    longitude: Optional[float] = Field(None, description="Longitude")
